@@ -2,18 +2,36 @@ import React, { ChangeEvent, useState } from "react";
 import styles from "./Upload.module.scss";
 import Button from "../common/Button/Button";
 import { fileUpload } from "@/API/FileUpload";
+import CommonProgress from "../common/Progress";
+import { addFolder } from "@/API/Firestore";
 
 export default function UploadFiles() {
   const [isFileVisible, setFileVisible] = useState(false);
-  const [file, setFile] = useState({});
+  const [progress, setProgress] = useState(0);
+  const [isFolderVisible, setFolderVisible] = useState(false);
+  const [folderName, setFolderName] = useState("");
   const uploadFile = async (event: ChangeEvent<HTMLInputElement>) => {
     let file = event.target.files?.[0];
-    fileUpload(file);
+    fileUpload(file, setProgress);
+  };
+
+  const uploadFolder = () => {
+    let payload = {
+      folderName: folderName,
+      isFolder: true,
+      fileList: [],
+    };
+
+    addFolder(payload);
+    setFolderName("");
   };
   return (
     <div className={styles.uploadMain}>
       <Button
-        onClick={() => setFileVisible(!isFileVisible)}
+        onClick={() => {
+          setFileVisible(!isFileVisible);
+          setFolderVisible(false);
+        }}
         title="Add a File"
         btnClass="btn-success"
       />
@@ -26,7 +44,37 @@ export default function UploadFiles() {
       ) : (
         <></>
       )}
-      <Button title="Create a Folder" btnClass="btn-success" />
+      <Button
+        onClick={() => {
+          setFileVisible(false);
+          setFolderVisible(!isFolderVisible);
+        }}
+        title="Add a Folder"
+        btnClass="btn-success"
+      />
+      {isFolderVisible ? (
+        <>
+          <input
+            type="text"
+            placeholder="Type here"
+            value={folderName}
+            onChange={(event) => setFolderName(event.target.value)}
+            className="input input-bordered input-accent w-full max-w-xs"
+          />
+          <Button
+            onClick={uploadFolder}
+            title="Create"
+            btnClass="btn-success"
+          />
+        </>
+      ) : (
+        <></>
+      )}
+      {progress === 0 || progress === 100 ? (
+        <></>
+      ) : (
+        <CommonProgress progress={progress} />
+      )}
     </div>
   );
 }
