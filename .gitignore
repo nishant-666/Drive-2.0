@@ -11,7 +11,7 @@
 # database
 /prisma/db.sqlite
 /prisma/db.sqlite-journal
-src/firebaseConfig.tsx
+# src/firebaseConfig.tsx
 # next.js
 /.next/
 /out/
