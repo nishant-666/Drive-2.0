@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./ShowFiles.module.scss";
 import { fetchFiles } from "@/hooks/fetchFiles";
-import { AiFillFileText, AiFillFolder } from "react-icons/ai";
+import { AiFillFolder } from "react-icons/ai";
 
 export default function ShowFiles() {
   let { fileList } = fetchFiles();
