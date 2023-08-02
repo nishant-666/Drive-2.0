@@ -26,3 +26,11 @@
   object-fit: cover;
   border-radius: 10px;
 }
+
+.parentFolder {
+  margin-left: 30px;
+
+  .folderName {
+    font-size: 30px;
+  }
+}
