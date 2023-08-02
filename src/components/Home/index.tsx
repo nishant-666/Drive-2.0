@@ -1,17 +1,24 @@
 import React from "react";
 import Topbar from "../Topbar";
-import styles from "./Home.module.scss";
 import UploadFiles from "../UploadFiles";
 import ShowFiles from "../ShowFiles";
+import { useFetchSession } from "@/hooks/useSession";
 
 export default function HomeComponent() {
+  let { session } = useFetchSession();
   return (
     <div>
       <Topbar />
 
-      <UploadFiles />
+      {session?.user ? (
+        <>
+          <UploadFiles parentId="" />
 
-      <ShowFiles />
+          <ShowFiles parentId="" />
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

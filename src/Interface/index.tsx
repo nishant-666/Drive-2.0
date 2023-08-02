@@ -16,3 +16,7 @@ interface GithubAuth {
 interface ArrayType {
   map: Function;
 }
+
+interface FolderStructure {
+  parentId: string;
+}
