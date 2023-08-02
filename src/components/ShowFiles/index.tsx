@@ -10,7 +10,7 @@ export default function ShowFiles({ parentId }: FolderStructure) {
   let { session } = useFetchSession();
   let { fileList } = fetchFiles(parentId, session?.user.email as string);
   let { folderName } = fetchFolderName(parentId);
-  console.log(folderName);
+
   const router = useRouter();
   const openFile = (fileLink: string) => {
     window.open(fileLink);
