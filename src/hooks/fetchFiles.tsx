@@ -1,4 +1,4 @@
-import { onSnapshot, collection, query, where } from "firebase/firestore";
+import { onSnapshot, collection } from "firebase/firestore";
 import { database } from "@/firebaseConfig";
 import { useEffect, useState } from "react";
 
@@ -9,25 +9,34 @@ export const fetchFiles = (parentId: string, userEmail: string) => {
 
   const getFolders = () => {
     if (userEmail) {
-      let emailQuery = query(files, where("userEmail", "==", userEmail));
       if (!parentId) {
-        onSnapshot(emailQuery, (response) => {
+        onSnapshot(files, (response) => {
           setFileList(
             response.docs
               .map((item) => {
                 return { ...item.data(), id: item.id };
               })
-              .filter((item: any) => item.parentId === "")
+              .filter(
+                (item: any) =>
+                  item.parentId === "" &&
+                  (item.sharedTo?.includes(userEmail) ||
+                    item.userEmail === userEmail)
+              )
           );
         });
       } else {
-        onSnapshot(emailQuery, (response) => {
+        onSnapshot(files, (response) => {
           setFileList(
             response.docs
               .map((item) => {
                 return { ...item.data(), id: item.id };
               })
-              .filter((item: any) => item.parentId === parentId)
+              .filter(
+                (item: any) =>
+                  item.parentId === parentId &&
+                  (item.sharedTo?.includes(userEmail) ||
+                    item.userEmail === userEmail)
+              )
           );
         });
       }

@@ -1,6 +1,15 @@
+.filesGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 30px;
+  justify-content: center;
+  margin-top: 60px;
+}
+
 .files {
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
   background-color: #64748b;
   cursor: pointer;
   border-radius: 10px;
@@ -9,15 +18,7 @@
   align-items: center;
   flex-direction: column;
   gap: 20px;
-}
-
-.filesGrid {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(5, auto);
-  gap: 30px;
-  justify-content: center;
-  margin-top: 60px;
+  position: relative;
 }
 
 .imageLink {
@@ -32,5 +33,14 @@
 
   .folderName {
     font-size: 30px;
+  }
+}
+
+.dots {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  .icon {
+    cursor: pointer;
   }
 }

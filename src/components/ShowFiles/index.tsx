@@ -1,19 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./ShowFiles.module.scss";
 import { fetchFiles } from "@/hooks/fetchFiles";
 import { useFetchSession } from "@/hooks/useSession";
 import { AiFillFolder } from "react-icons/ai";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { useRouter } from "next/router";
 import { fetchFolderName } from "@/hooks/fetchFolderName";
+import { shareFiles } from "@/API/Firestore";
 
 export default function ShowFiles({ parentId }: FolderStructure) {
   let { session } = useFetchSession();
   let { fileList } = fetchFiles(parentId, session?.user.email as string);
   let { folderName } = fetchFolderName(parentId);
-
+  const [email, setEmail] = useState("");
+  const [currentFileId, setCurrentId] = useState("");
   const router = useRouter();
   const openFile = (fileLink: string) => {
     window.open(fileLink);
+  };
+
+  const getSharedEmails = () => {
+    shareFiles(email, currentFileId);
   };
   return (
     <>
@@ -32,22 +39,45 @@ export default function ShowFiles({ parentId }: FolderStructure) {
             return (
               <div key={file.id}>
                 {file.isFolder ? (
-                  <div
-                    className={`${styles.files}`}
-                    onClick={() => router.push(`/folder?id=${file.id}`)}
-                  >
-                    <AiFillFolder size={80} />
-                    <p>{file.folderName}</p>
-                  </div>
-                ) : (
-                  <div
-                    className={`${styles.files} `}
-                    onClick={() => openFile(file.imageLink)}
-                  >
+                  <div className={`${styles.files}`}>
+                    <AiFillFolder
+                      size={80}
+                      onClick={() => router.push(`/folder?id=${file.id}`)}
+                    />
                     <p>{file.folderName}</p>
 
-                    <img className={styles.imageLink} src={file.imageLink} />
+                    <div className={styles.dots}>
+                      <BsThreeDotsVertical
+                        onClick={() => {
+                          (window as any).my_modal_1.showModal();
+                          setCurrentId(file.id);
+                        }}
+                        className={styles.icon}
+                        size={20}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className={`${styles.files} `}>
+                    <p>{file.folderName}</p>
+
+                    <img
+                      onClick={() => openFile(file.imageLink)}
+                      className={styles.imageLink}
+                      src={file.imageLink}
+                    />
                     <p>{file.imageName}</p>
+
+                    <div className={styles.dots}>
+                      <BsThreeDotsVertical
+                        onClick={() => {
+                          (window as any).my_modal_1.showModal();
+                          setCurrentId(file.id);
+                        }}
+                        className={styles.icon}
+                        size={20}
+                      />
+                    </div>
                   </div>
                 )}
 
@@ -57,6 +87,25 @@ export default function ShowFiles({ parentId }: FolderStructure) {
           }
         )}
       </div>
+
+      <dialog id="my_modal_1" className="modal">
+        <form method="dialog" className="modal-box">
+          <input
+            type="email"
+            id="email"
+            placeholder="Type here"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            className="input input-bordered w-full max-w-xs"
+          />
+          <div className="modal-action">
+            <button onClick={getSharedEmails} className="btn btn-accent">
+              Share
+            </button>
+            <button className="btn">Close</button>
+          </div>
+        </form>
+      </dialog>
     </>
   );
 }

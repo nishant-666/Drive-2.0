@@ -8,7 +8,7 @@ interface Progress {
   progress: number;
 }
 
-interface GithubAuth {
+interface AuthInteface {
   clientId: string;
   clientSecret: string;
 }

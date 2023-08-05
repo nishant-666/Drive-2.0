@@ -24,6 +24,7 @@ export default function UploadFiles({ parentId }: FolderStructure) {
       isFolder: true,
       parentId: parentId || "",
       userEmail: session?.user.email,
+      sharedEmails: [],
     };
 
     addFolder(payload);
