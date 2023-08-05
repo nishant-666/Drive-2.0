@@ -22,7 +22,6 @@ export default function UploadFiles({ parentId }: FolderStructure) {
     let payload = {
       folderName: folderName,
       isFolder: true,
-      fileList: [],
       parentId: parentId || "",
       userEmail: session?.user.email,
     };
