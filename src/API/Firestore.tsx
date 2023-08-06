@@ -7,7 +7,8 @@ export const addFiles = (
   imageLink: string,
   imageName: string,
   parentId: string,
-  userEmail: string
+  userEmail: string,
+  ownerEmail: string
 ) => {
   try {
     addDoc(files, {
@@ -16,7 +17,7 @@ export const addFiles = (
       isFolder: false,
       parentId: parentId,
       userEmail: userEmail,
-      sharedTo: [],
+      sharedTo: ownerEmail ? [ownerEmail] : [],
     });
   } catch (err) {
     console.log(err);
@@ -27,7 +28,6 @@ export const addFolder = (payload: {}) => {
   try {
     addDoc(files, {
       ...payload,
-      sharedTo: [],
     });
   } catch (err) {
     console.log(err);
@@ -43,6 +43,17 @@ export const shareFiles = async (email: string, currentFileId: string) => {
     await updateDoc(sharedFileDoc, {
       sharedTo: [...response.data()?.sharedTo, email],
     });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const fetchCurrentFolders = async (parentId: string) => {
+  try {
+    let currentFolder = doc(files, parentId);
+
+    let response = await getDoc(currentFolder);
+    return response.data()?.userEmail;
   } catch (err) {
     console.log(err);
   }

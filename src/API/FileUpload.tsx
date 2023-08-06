@@ -6,7 +6,8 @@ export const fileUpload = (
   file: any,
   setProgress: Function,
   parentId: string,
-  userEmail: string
+  userEmail: string,
+  ownerEmail: string
 ) => {
   const storageRef = ref(storage, `files/${file.name}`);
   const uploadTask = uploadBytesResumable(storageRef, file);
@@ -23,7 +24,7 @@ export const fileUpload = (
     },
     () => {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        addFiles(downloadURL, file.name, parentId, userEmail);
+        addFiles(downloadURL, file.name, parentId, userEmail, ownerEmail);
       });
     }
   );

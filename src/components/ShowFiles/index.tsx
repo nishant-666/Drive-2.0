@@ -21,6 +21,7 @@ export default function ShowFiles({ parentId }: FolderStructure) {
 
   const getSharedEmails = () => {
     shareFiles(email, currentFileId);
+    (window as any).my_modal_1.close();
   };
   return (
     <>
@@ -35,6 +36,8 @@ export default function ShowFiles({ parentId }: FolderStructure) {
             isFolder: false;
             folderName: "";
             id: "";
+            sharedTo: [];
+            userEmail: "";
           }) => {
             return (
               <div key={file.id}>
@@ -42,7 +45,11 @@ export default function ShowFiles({ parentId }: FolderStructure) {
                   <div className={`${styles.files}`}>
                     <AiFillFolder
                       size={80}
-                      onClick={() => router.push(`/folder?id=${file.id}`)}
+                      onClick={() =>
+                        router.push(
+                          `/folder?id=${file.id}&owner=${file.userEmail}`
+                        )
+                      }
                     />
                     <p>{file.folderName}</p>
 
@@ -89,7 +96,7 @@ export default function ShowFiles({ parentId }: FolderStructure) {
       </div>
 
       <dialog id="my_modal_1" className="modal">
-        <form method="dialog" className="modal-box">
+        <section className="modal-box">
           <input
             type="email"
             id="email"
@@ -102,9 +109,14 @@ export default function ShowFiles({ parentId }: FolderStructure) {
             <button onClick={getSharedEmails} className="btn btn-accent">
               Share
             </button>
-            <button className="btn">Close</button>
+            <button
+              onClick={() => (window as any).my_modal_1.close()}
+              className="btn"
+            >
+              Close
+            </button>
           </div>
-        </form>
+        </section>
       </dialog>
     </>
   );

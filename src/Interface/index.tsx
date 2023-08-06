@@ -19,4 +19,5 @@ interface ArrayType {
 
 interface FolderStructure {
   parentId: string;
+  ownerEmail: string;
 }
